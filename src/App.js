@@ -7,14 +7,31 @@ import { useCallback, useEffect, useState } from "react";
 function App() {
   let [appointmentList, setAppointmentList] = useState([]);
   let [query, setQuery] = useState("");
+  let [sortBy, setSortBy] = useState("petName");
+  let [orderBy, setOrderBy] = useState("asc");
 
-  const filteredAppointments = appointmentList.filter((item) => {
-    return (
-      item.petName.toLowerCase().includes(query.toLowerCase()) ||
-      item.ownerName.toLowerCase().includes(query.toLowerCase()) ||
-      item.aptNotes.toLowerCase().includes(query.toLowerCase())
-    );
-  });
+  function compare() {
+    return (a, b) => {
+      let order = orderBy === "asc" ? 1 : -1;
+      return a[sortBy].toLowerCase() < b[sortBy].toLowerCase()
+        ? -1 * order
+        : 1 * order;
+    };
+  }
+
+  function appointmentFilter() {
+    return (item) => {
+      return (
+        item.petName.toLowerCase().includes(query.toLowerCase()) ||
+        item.ownerName.toLowerCase().includes(query.toLowerCase()) ||
+        item.aptNotes.toLowerCase().includes(query.toLowerCase())
+      );
+    };
+  }
+
+  const filteredAppointments = appointmentList
+    .filter(appointmentFilter())
+    .sort(compare());
 
   const fetchData = useCallback(() => {
     fetch("./data.json")
