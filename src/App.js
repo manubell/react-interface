@@ -50,7 +50,14 @@ function App() {
         appointments
       </h1>
 
-      <AddAppointment />
+      <AddAppointment
+        onSendAppointment={(myAppointment) =>
+          setAppointmentList([...appointmentList, myAppointment])
+        }
+        lastId={appointmentList.reduce(
+          (max, item) => (Number(item.id) > max ? Number(item.id) : max, 0)
+        )}
+      />
       <Search
         query={query}
         onQueryChange={(myQuery) => setQuery(myQuery)}
