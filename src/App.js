@@ -55,7 +55,7 @@ function App() {
           setAppointmentList([...appointmentList, myAppointment])
         }
         lastId={appointmentList.reduce(
-          (max, item) => (Number(item.id) > max ? Number(item.id) : max, 0)
+          (max, item) => Number(item.id) > max ? Number(item.id) : max, 0
         )}
       />
       <Search
